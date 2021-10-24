@@ -1,25 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from 'react'
+import { Layout, Modal } from 'antd'
+import Navbar from './components/Navbar'
+import LoginForm from './components/LoginForm'
+import Hero from './components/Hero'
+import ItemList from './components/ItemList'
+import Copyright from './components/Copyright'
+const { Content } = Layout
 
 function App() {
+  const uid = 1
+  const [listItems, setListItems] = useState()
+  const [loading, setLoading] = useState(false)
+  const [user, setUser] = useState()
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <Layout>
+      <Navbar />
+      <Content className="site-layout" style={{ marginTop: 64, padding: '0 50px' }}>
+        {!user
+          ? <Modal title="Login" visible={true} footer={null}>
+              <LoginForm setUser={setUser} />
+            </Modal>
+          : <Hero
+              uid={user.uid}
+              setLoading={setLoading}
+              setListItems={setListItems} />}
+        <ItemList
+          user={user}
+          listItems={listItems}
+          setListItems={setListItems}
+          setLoading={setLoading}
+          loading={loading} />
+      </Content>
+      <Copyright />
+    </Layout>
+  )
 }
 
-export default App;
+export default App
